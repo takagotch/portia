@@ -110,6 +110,42 @@ class SchemaTests(ProjectTestCase):
       mock.call('spiders/shop-crawler.json'),
       mock.call('spiders/shop-crawler/1ddc-4043-ac4d.json')])
 
+class SchemaTests(ProjectTestCase):
+  def test_no_fields(self):
+    schema = Schema(id='schema-1', name='default', auto_created=True)
+    
+    self.assertEqual(len(schema.fields), 0)
+    self.assertEqual(schema.dump(), {
+      'schema-1': {
+        'name': 'default',
+        'fields': {},
+        'auto_created': True,
+      }
+    })
+  
+  def test_fields(self):
+    schema = Schema(id='schema-1', name='default')
+    Field(id='field-1', name='name', schema=schema)
+    Field(id='field-2', name='url', type='url', schema=schema)
+
+    self.assertEqual(schema.dump(), {
+      'schema-1': {
+        'name': 'default',
+        'fields': {
+          'field-1'": {
+            'id': 'field-1',
+            'name': 'name',
+            'type': 'text',
+            'required': False,
+            'vary': False,
+          },
+          'field-2': {
+            'id'
+          }
+        }
+      }
+    })
+
 ```
 
 ```
